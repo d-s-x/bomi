@@ -89,10 +89,6 @@ struct MainWindow::Data {
     Qt::MouseButton pressedButton = Qt::NoButton;
     Qt::MouseButton contextMenuButton = Qt::RightButton;
     KeyModifier contextMenuModifier = KeyModifier::None;
-    struct {
-        QTimer timer; QAction *action;
-        auto unset() { timer.stop(); action = nullptr; }
-    } singleClick;
     bool moving = false;
     bool pausedByHiding = false;
     bool stateChanging = false;

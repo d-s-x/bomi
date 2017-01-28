@@ -299,7 +299,6 @@ auto MainWindow::mouseDoubleClickEvent(QMouseEvent *event) -> void
         QQuickView::mouseDoubleClickEvent(event);
     if (event->isAccepted())
         return;
-    d->singleClick.unset();
     if (event->buttons() & Qt::LeftButton) {
         const auto act = d->menu.action(d->actionId(MsBh::DoubleClick, event));
         if (!act)
@@ -320,9 +319,7 @@ auto MainWindow::mouseReleaseEvent(QMouseEvent *event) -> void
     ME(mouseReleaseEvent);
     if (event->isAccepted())
         return;
-    const auto singleClickAction = d->singleClick.action;
     const auto pressed = d->pressedButton;
-    d->singleClick.unset();
     d->pressedButton = Qt::NoButton;
     if (pressed != event->button())
         return;
@@ -334,13 +331,7 @@ auto MainWindow::mouseReleaseEvent(QMouseEvent *event) -> void
     const auto mb = MouseBehaviorInfo::fromData(pressed);
     if (mb == MsBh::NoBehavior)
         return;
-    if (pressed == Qt::LeftButton) {
-        if (singleClickAction) {
-            d->singleClick.action = singleClickAction;
-            d->singleClick.timer.start(qApp->doubleClickInterval() + 10);
-        }
-    } else
-        d->trigger(d->menu.action(d->actionId(mb, event)));
+    d->trigger(d->menu.action(d->actionId(mb, event)));
 }
 
 
@@ -353,7 +344,6 @@ auto MainWindow::mousePressEvent(QMouseEvent *event) -> void
     ME(mousePressEvent);
     if (event->isAccepted() && !d->top->filteredMousePressEvent())
         return;
-    d->singleClick.unset();
     d->pressedButton = Qt::NoButton;
     switch (event->button()) {
     case Qt::LeftButton:
@@ -383,9 +373,6 @@ auto MainWindow::mousePressEvent(QMouseEvent *event) -> void
         d->contextMenu.exec(event->globalPos());
         d->pressedButton = Qt::NoButton;
     }
-
-    if (d->pressedButton == Qt::LeftButton)
-        d->singleClick.action = d->menu.action(d->actionId(MsBh::LeftClick, event));
 }
 
 auto MainWindow::wheelEvent(QWheelEvent *event) -> void

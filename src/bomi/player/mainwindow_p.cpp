@@ -228,10 +228,6 @@ auto MainWindow::Data::initItems() -> void
     waiter.setSingleShot(true);
     connect(&waiter, &QTimer::timeout, p, [=] () { updateWaitingMessage(); });
 
-    singleClick.timer.setSingleShot(true);
-    connect(&singleClick.timer, &QTimer::timeout, p,
-            [=] () { if (singleClick.action) trigger(singleClick.action); });
-
     mouse = WindowObject::getMouse();
     connect(mouse, &MouseObject::hidingCursorBlockedChanged, p, [=] (bool b) {
         if (b) {

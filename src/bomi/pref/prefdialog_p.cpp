@@ -332,11 +332,6 @@ auto PrefMouseActionTree::setActionList(const QVector<ActionInfo> *acts) -> void
             item->setText(1, qApp->translate("PrefDialog",
                 "Typically denoted as 'Forward' button"));
             break;
-        case MouseBehavior::LeftClick:
-            item->setText(1, qApp->translate("PrefDialog",
-                "Triggered with delay of %1sec to be distingushed from double click")
-                .arg(qApp->doubleClickInterval()*1e-3, 0, 'g', 3));
-            break;
         default:
             break;
         }
