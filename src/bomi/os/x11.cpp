@@ -160,7 +160,6 @@ X11::X11()
     GET_ATOM(_NET_WM_STATE_ABOVE);
     GET_ATOM(_NET_WM_STATE_BELOW);
     GET_ATOM(_NET_WM_STATE_DEMANDS_ATTENTION);
-    GET_ATOM(_NET_WM_STATE_STAYS_ON_TOP);
     GET_ATOM(_NET_WM_MOVERESIZE);
 #undef GET_ATOM
 
@@ -448,26 +447,6 @@ auto X11WindowAdapter::endMoveByDrag() -> void
     WindowAdapter::endMoveByDrag();
 }
 
-auto X11WindowAdapter::isAlwaysOnTop() const -> bool
-{
-    const auto cookie = xcb_get_property_unchecked
-        (d->connection, 0, winId(), d->atoms[_NET_WM_STATE], XCB_ATOM_ATOM, 0, 1024);
-    auto reply = _Reply(xcb_get_property_reply(d->connection, cookie, nullptr));
-    if (!reply || reply->format != 32 || reply->type != XCB_ATOM_ATOM)
-        return false;
-    auto begin = static_cast<const xcb_atom_t *>(xcb_get_property_value(reply.data()));
-    auto end = begin + reply->length;
-    if (std::find(begin, end, d->atoms[_NET_WM_STATE_STAYS_ON_TOP]) != end)
-        return true;
-    if (std::find(begin, end, d->atoms[_NET_WM_STATE_ABOVE]) != end)
-        return true;
-    return false;
-}
-
-auto X11WindowAdapter::setAlwaysOnTop(bool on) -> void
-{
-    d->sendState(winId(), on, _NET_WM_STATE_ABOVE, _NET_WM_STATE_STAYS_ON_TOP);
-}
 
 auto createAdapter(QWindow *w) -> WindowAdapter*
 {
