@@ -57,7 +57,6 @@ enum XcbAtom {
     _NET_WM_STATE_ABOVE,
     _NET_WM_STATE_BELOW,
     _NET_WM_STATE_DEMANDS_ATTENTION,
-    _NET_WM_STATE_STAYS_ON_TOP,
     _NET_WM_MOVERESIZE,
     XcbAtomEnd,
     XcbAtomBegin = _NET_WM_STATE
