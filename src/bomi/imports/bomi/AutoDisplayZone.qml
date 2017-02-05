@@ -4,7 +4,6 @@ import bomi 1.0 as B
 Item {
     property alias target: hideTimer.target
     property Item box: zone
-    property alias showDelay: showTimer.interval
     property alias hideDelay: hideTimer.timeout
     property bool auto: false
     property bool blockHiding: false
@@ -16,7 +15,7 @@ Item {
 
     MouseArea {
         id: zone
-        property bool hovered: containsMouse && entered
+        property bool hovered: auto && containsMouse && entered
         property bool entered: false
 
         anchors.fill: parent
@@ -29,7 +28,6 @@ Item {
                 B.App.window.showToolTip(zone, Qt.point(mouseX, mouseY), qsTr("Click to display"))
             else
                 B.App.window.hideToolTip()
-            showTimer.running = auto && hovered && target
         }
         onPressed: mouse.accepted = status != __ToolVisible
         onClicked: { if (!target.visible) display() }
@@ -41,11 +39,6 @@ Item {
             hide: function() {
                 return !B.App.window.mouse.isIn(box) && !blockHiding
             }
-        }
-
-        Timer {
-            id: showTimer; repeat: false; interval: 300
-            onTriggered: { if (B.App.window.mouse.isIn(zone)) zone.display() }
         }
     }
 }
