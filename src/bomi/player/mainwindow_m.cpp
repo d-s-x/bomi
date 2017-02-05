@@ -844,7 +844,7 @@ auto MainWindow::Data::plugMenu() -> void
             sview->setComponents(e.subtitleSelection());
         sview->setVisible(!sview->isVisible());
     });
-    connect(tool[u"pref"_q], &QAction::triggered, p, [this] () {
+    connect(menu[u"pref"_q], &QAction::triggered, p, [this] () {
         if (!prefDlg) {
             prefDlg = dialog<PrefDialog>();
             prefDlg->setAudioDeviceList(e.audioDeviceList());

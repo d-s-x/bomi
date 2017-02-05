@@ -105,7 +105,7 @@ B.AppWithDock {
                 }
                 B.Button {
                     id: preferences; width: 32; height: 32
-                    action: "tool/pref"; icon.prefix: "pref"
+                    action: "pref"; icon.prefix: "pref"
                 }
             }
         }

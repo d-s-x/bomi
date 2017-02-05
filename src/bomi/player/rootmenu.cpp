@@ -618,7 +618,6 @@ RootMenu::RootMenu()
         d->action(u"log"_q, QT_TR_NOOP("Log Viewer"));
         d->separator();
 
-        d->action(u"pref"_q, QT_TR_NOOP("Preferences"))->setMenuRole(QAction::PreferencesRole);
         auto assoc = d->action(u"associate-files"_q, QT_TR_NOOP("Associate Files"));
         assoc->setEnabled(OS::canAssociateFileTypes());
         assoc->setVisible(OS::canAssociateFileTypes());
@@ -653,6 +652,7 @@ RootMenu::RootMenu()
         d->action(u"close"_q, QT_TR_NOOP("Close"));
     });
 
+    d->action(u"pref"_q, QT_TR_NOOP("Preferences"))->setMenuRole(QAction::PreferencesRole);
     d->menu(u"help"_q, QT_TR_NOOP("Help"), [=] () {
         d->action(u"about"_q, QT_TR_NOOP("About bomi"))->setMenuRole(QAction::AboutRole);
     });

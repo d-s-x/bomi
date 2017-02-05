@@ -191,7 +191,7 @@ auto ShortcutMap::default_(const QString &id) -> QList<Key>
        map[u"tool/history/toggle"_q] << Qt::Key_C;
        map[u"tool/subtitle"_q] << Qt::SHIFT + Qt::Key_V;
        map[u"tool/find-subtitle"_q] << Qt::SHIFT + Qt::CTRL + Qt::Key_F;
-       map[u"tool/pref"_q] << Qt::Key_P;
+       map[u"pref"_q] << Qt::Key_P;
        map[u"tool/reload-skin"_q] << Qt::Key_R + Qt::CTRL;
        map[u"tool/playinfo"_q] << Qt::Key_Tab;
        map[u"tool/log"_q] << Qt::ALT + Qt::Key_L;

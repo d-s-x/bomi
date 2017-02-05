@@ -68,6 +68,7 @@ auto MainWindow::Data::initContextMenu() -> void
     addContextMenu(menu(u"tool"_q));
     addContextMenu(menu(u"window"_q));
     contextMenu.addSeparator();
+    contextMenu.addAction(menu[u"pref"_q]);
     contextMenu.addAction(menu(u"help"_q)[u"about"_q]);
     contextMenu.addAction(menu[u"exit"_q]);
 #ifdef Q_OS_MAC
