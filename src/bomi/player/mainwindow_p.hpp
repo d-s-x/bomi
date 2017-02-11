@@ -86,6 +86,7 @@ struct MainWindow::Data {
     QWinTaskbarButton taskbar;
 #endif
 
+    QPoint pressedPos = QPoint();
     Qt::MouseButton pressedButton = Qt::NoButton;
     Qt::MouseButton contextMenuButton = Qt::RightButton;
     KeyModifier contextMenuModifier = KeyModifier::None;
