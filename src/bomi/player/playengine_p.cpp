@@ -193,6 +193,8 @@ auto PlayEngine::Data::updateMediaName(const QString &name) -> void
     else
         type = MediaObject::Url;
     info.media.setName(name.isEmpty() ? mrl.displayName() : name);
+    if (mrl.isLocalFile())
+        info.media.setName(QFileInfo(mrl.toLocalFile()).completeBaseName());
     info.media.setType(type);
 }
 
