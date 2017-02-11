@@ -54,14 +54,9 @@ public:
     auto setFullScreen(bool fs) -> void final;
     auto isAlwaysOnTop() const -> bool final;
     auto setAlwaysOnTop(bool onTop) -> void final;
-    auto startMoveByDrag(const QPointF &m) -> void final;
     auto moveByDrag(const QPointF &m) -> void final;
-    auto endMoveByDrag() -> void final;
     auto setImeEnabled(bool /*enabled*/) -> void { }
     auto isImeEnabled() const -> bool { return false; }
-private:
-    auto stopDrag() -> void;
-    QTimer m_timer;
 };
 
 class HwAccX11 : public HwAcc {

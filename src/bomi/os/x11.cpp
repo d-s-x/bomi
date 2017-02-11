@@ -383,50 +383,12 @@ auto setScreensaverEnabled(bool enabled) -> void
 X11WindowAdapter::X11WindowAdapter(QWindow* w)
     : WindowAdapter(w)
 {
-    connect(&m_timer, &QTimer::timeout, this, [=] () {
-        auto cookie = xcb_query_pointer_unchecked(d->connection, winId());
-        auto ptr = xcb_query_pointer_reply(d->connection, cookie, nullptr);
-        const auto pressed = ptr->mask & XCB_BUTTON_MASK_1;
-        free(ptr);
-        if (!pressed)
-            stopDrag();
-    });
-    m_timer.setInterval(10);
 }
 
 auto X11WindowAdapter::setFullScreen(bool fs) -> void
 {
     if (isFullScreen() != fs)
         d->sendState(winId(), fs, _NET_WM_STATE_FULLSCREEN);
-}
-
-auto X11WindowAdapter::stopDrag() -> void
-{
-    m_timer.stop();
-    if (!isMovingByDrag())
-        return;
-
-    // hack to get back focus
-    auto pos = QCursor::pos();
-    d->send(winId(), _NET_WM_MOVERESIZE, pos.x(), pos.y(), 11, 1, 0);
-    auto reset = [&] () {
-        QCursor::setPos(pos + QPoint(10, 0));
-        QCursor::setPos(pos - QPoint(10, 0));
-        QCursor::setPos(pos);
-    };
-    xcb_test_fake_input(d->connection, XCB_BUTTON_PRESS, XCB_BUTTON_INDEX_1,
-                        XCB_WINDOW_NONE, d->root, 0, 0, 0);
-    reset();
-    xcb_test_fake_input(d->connection, XCB_BUTTON_RELEASE, XCB_BUTTON_INDEX_1,
-                        XCB_WINDOW_NONE, d->root, 0, 0, 0);
-    xcb_flush(d->connection);
-    reset();
-}
-
-auto X11WindowAdapter::startMoveByDrag(const QPointF &m) -> void
-{
-    WindowAdapter::startMoveByDrag(m);
-    stopDrag();
 }
 
 auto X11WindowAdapter::moveByDrag(const QPointF &m) -> void
@@ -440,13 +402,6 @@ auto X11WindowAdapter::moveByDrag(const QPointF &m) -> void
             1, // button 1
             0); // source indication: normal
     setMovingByDrag(true);
-    m_timer.start();
-}
-
-auto X11WindowAdapter::endMoveByDrag() -> void
-{
-    stopDrag();
-    WindowAdapter::endMoveByDrag();
 }
 
 auto X11WindowAdapter::isAlwaysOnTop() const -> bool
