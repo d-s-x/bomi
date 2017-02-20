@@ -28,7 +28,10 @@ fi
 
 orig="$(pwd)"
 
-cd src/mpv && $py ./waf clean; $py ./waf distclean; $py ./waf configure $args && \
+# run src/mpv/version.sh to define VRESION and BUILDDATE
+cd src/mpv && ./version.sh
+
+$py ./waf clean; $py ./waf distclean; $py ./waf configure $args && \
 $py ./waf build -j $njobs && $py ./waf install
 
 cd "$orig"
