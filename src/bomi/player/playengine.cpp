@@ -417,10 +417,18 @@ auto PlayEngine::reloadSubtitleFiles(const EncodingInfo &enc, bool detect) -> vo
     auto old2 = d->params.sub_tracks_inclusive();
     d->mutex.unlock();
     clearSubtitleFiles();
+    QStringList files;
+    const int id = old1.selectionId();
     for (auto &track : old1) {
+        // One file can have multiple tracks of subtitles.
+        if (files.contains(track.file())) continue;
+        else files.push_back(track.file());
+
         if (track.isExternal())
-            d->sub_add(track.file(), d->encoding(track, enc, detect), track.isSelected());
+            d->sub_add(track.file(), d->encoding(track, enc, detect), false);
     }
+    if (id >= 0)
+        setSubtitleTrackSelected(id, true);
     d->setInclusiveSubtitles(d->restoreInclusiveSubtitles(old2, enc, detect));
 }
 
