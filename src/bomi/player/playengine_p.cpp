@@ -304,7 +304,7 @@ auto PlayEngine::Data::onLoad() -> void
         MpvFileList files, encs;
         _R(files, loads) = res;
         if (!files.names.isEmpty()) {
-            mpv.setAsync("options/subcp", assEncodings[files.names.front()].name().toLatin1());
+            mpv.setAsync("options/sub-codepage", assEncodings[files.names.front()].name().toLatin1());
             mpv.setAsync("file-local-options/sub-file", files);
         }
         bool sel = false;
@@ -674,7 +674,7 @@ auto PlayEngine::Data::observe() -> void
     });
 
     mpv.observe("audio-codec", [=] (MpvLatin1 &&c) { info.audio.codec()->parse(c); });
-    mpv.observe("audio-format", [=] (MpvLatin1 &&f) { info.audio.decoder()->setType(f); });
+    mpv.observe("audio-codec-name", [=] (MpvLatin1 &&f) { info.audio.decoder()->setType(f); });
     mpv.observe("audio-bitrate", [=] (int bps) { info.audio.decoder()->setBitrate(bps); });
     mpv.observe("audio-samplerate", [=] (int s) { info.audio.decoder()->setSampleRate(s, false); });
     mpv.observe("audio-channels", [=] (int n)
@@ -1078,7 +1078,7 @@ auto PlayEngine::Data::clearTimings() -> void
 
 auto PlayEngine::Data::sub_add(const QString &file, const EncodingInfo &enc, bool select) -> void
 {
-    mpv.setAsync("options/subcp", enc.name().toLatin1());
+    mpv.setAsync("options/sub-codepage", enc.name().toLatin1());
     mpv.tellAsync("sub_add", MpvFile(file), select ? "select"_b : "auto"_b);
     mutex.lock();
     assEncodings[file] = enc;
@@ -1106,7 +1106,7 @@ auto PlayEngine::Data::addSubtitleFiles(const QVector<SubtitleWithEncoding> &sub
                 loaded.back().selection() = true;
             }
         } else {
-            mpv.setAsync("options/subcp", enc.name().toLatin1());
+            mpv.setAsync("options/sub-codepage", enc.name().toLatin1());
             mpv.tellAsync("sub_add", MpvFile(s.file), "auto"_b);
             mutex.lock();
             assEncodings[s.file] = enc;

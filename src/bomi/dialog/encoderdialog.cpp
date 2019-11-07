@@ -397,7 +397,7 @@ auto EncoderDialog::run() -> QString
             if (d->sub.isExternal()) {
                 d->mpv->setOption("sub-file", MpvFile(d->sub.file()).toMpv());
                 auto cp = d->sub.encoding().name().replace("Windows-"_a, "cp"_a, Qt::CaseInsensitive);
-                d->mpv->setOption("subcp", cp.toLatin1());
+                d->mpv->setOption("sub-codepage", cp.toLatin1());
             } else
                 d->mpv->setOption("sid", _n(d->sub.id()));
         }

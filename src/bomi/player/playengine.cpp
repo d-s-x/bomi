@@ -399,7 +399,7 @@ auto PlayEngine::autoloadSubtitleFiles() -> void
     _R(files, loads) = d->autoloadSubtitle(&d->params);
     d->mutex.unlock();
     for (auto &file : files.names) {
-        d->mpv.setAsync("options/subcp", d->assEncodings[file].name().toLatin1());
+        d->mpv.setAsync("options/sub-codepage", d->assEncodings[file].name().toLatin1());
         d->mpv.tellAsync("sub_add", MpvFile(file), "auto"_b);
     }
     d->setInclusiveSubtitles(loads);
