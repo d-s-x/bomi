@@ -36,7 +36,7 @@ int mp_lavc_set_extradata(AVCodecContext *avctx, void *ptr, int size)
     if (size) {
         av_free(avctx->extradata);
         avctx->extradata_size = 0;
-        avctx->extradata = av_mallocz(size + FF_INPUT_BUFFER_PADDING_SIZE);
+        avctx->extradata = av_mallocz(size + AV_INPUT_BUFFER_PADDING_SIZE);
         if (!avctx->extradata)
             return -1;
         avctx->extradata_size = size;
@@ -67,7 +67,7 @@ void mp_copy_lav_codec_headers(AVCodecContext *avctx, AVCodecContext *st)
     avctx->channel_layout           = st->channel_layout;
     avctx->bits_per_coded_sample    = st->bits_per_coded_sample;
     // Required in FFmpeg 2.5.x / Libav 11, deprecated afterwards.
-    avctx->stream_codec_tag         = st->stream_codec_tag;
+    avctx->codec_tag         = st->codec_tag;
 }
 
 // We merely pass-through our PTS/DTS as an int64_t; libavcodec won't use it.

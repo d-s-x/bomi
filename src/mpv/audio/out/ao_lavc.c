@@ -155,8 +155,8 @@ static int init(struct ao *ao)
         ac->buffer_size =
             ac->aframesize * ac->sample_size * ao->channels.num * 2 + 200;
     }
-    if (ac->buffer_size < FF_MIN_BUFFER_SIZE)
-        ac->buffer_size = FF_MIN_BUFFER_SIZE;
+    if (ac->buffer_size < AV_INPUT_BUFFER_MIN_SIZE)
+        ac->buffer_size = AV_INPUT_BUFFER_MIN_SIZE;
     ac->buffer = talloc_size(ac, ac->buffer_size);
 
     // enough frames for at least 0.25 seconds

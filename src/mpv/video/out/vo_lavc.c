@@ -166,8 +166,8 @@ static int reconfig(struct vo *vo, struct mp_image_params *params, int flags)
         goto error;
 
     vc->buffer_size = 6 * width * height + 200;
-    if (vc->buffer_size < FF_MIN_BUFFER_SIZE)
-        vc->buffer_size = FF_MIN_BUFFER_SIZE;
+    if (vc->buffer_size < AV_INPUT_BUFFER_MIN_SIZE)
+        vc->buffer_size = AV_INPUT_BUFFER_MIN_SIZE;
     if (vc->buffer_size < sizeof(AVPicture))
         vc->buffer_size = sizeof(AVPicture);
 
@@ -253,30 +253,19 @@ static void write_packet(struct vo *vo, int size, AVPacket *packet)
 static int encode_video(struct vo *vo, AVFrame *frame, AVPacket *packet)
 {
     struct priv *vc = vo->priv;
-    if (encode_lavc_oformat_flags(vo->encode_lavc_ctx) & AVFMT_RAWPICTURE) {
-        if (!frame)
-            return 0;
-        memcpy(vc->buffer, frame, sizeof(AVPicture));
-        MP_DBG(vo, "got pts %f\n",
-               frame->pts * (double) vc->stream->codec->time_base.num /
-                            (double) vc->stream->codec->time_base.den);
-        packet->size = sizeof(AVPicture);
-        return packet->size;
-    } else {
-        int got_packet = 0;
-        int status = avcodec_encode_video2(vc->stream->codec, packet,
-                                           frame, &got_packet);
-        int size = (status < 0) ? status : got_packet ? packet->size : 0;
+    int got_packet = 0;
+    int status = avcodec_encode_video2(vc->stream->codec, packet,
+            frame, &got_packet);
+    int size = (status < 0) ? status : got_packet ? packet->size : 0;
 
-        if (frame)
-            MP_DBG(vo, "got pts %f; out size: %d\n",
-                   frame->pts * (double) vc->stream->codec->time_base.num /
-                   (double) vc->stream->codec->time_base.den, size);
+    if (frame)
+        MP_DBG(vo, "got pts %f; out size: %d\n",
+                frame->pts * (double) vc->stream->codec->time_base.num /
+                (double) vc->stream->codec->time_base.den, size);
 
-        if (got_packet)
-            encode_lavc_write_stats(vo->encode_lavc_ctx, vc->stream);
-        return size;
-    }
+    if (got_packet)
+        encode_lavc_write_stats(vo->encode_lavc_ctx, vc->stream);
+    return size;
 }
 
 static void draw_image_unlocked(struct vo *vo, mp_image_t *mpi)

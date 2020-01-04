@@ -6,7 +6,7 @@
 extern "C" {
 #include <video/mp_image_pool.h>
 #include <video/img_format.h>
-#include <libavfilter/avfiltergraph.h>
+#include <libavfilter/avfilter.h>
 #include <libpostproc/postprocess.h>
 }
 #include "enum/deintmethod.hpp"

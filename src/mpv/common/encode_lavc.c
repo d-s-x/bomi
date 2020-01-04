@@ -476,7 +476,7 @@ static void encode_2pass_prepare(struct encode_lavc_context *ctx,
             if (!(*bytebuf = stream_open(buf, ctx->global))) {
                 MP_WARN(ctx, "%s: could not open '%s', "
                        "disabling 2-pass encoding at pass 2\n", prefix, buf);
-                stream->codec->flags &= ~CODEC_FLAG_PASS2;
+                stream->codec->flags &= ~AV_CODEC_FLAG_PASS2;
                 set_to_avdictionary(ctx, dictp, "flags", "-pass2");
             } else {
                 struct bstr content = stream_read_complete(*bytebuf, NULL,
@@ -680,7 +680,7 @@ int encode_lavc_open_codec(struct encode_lavc_context *ctx, AVStream *stream)
         MP_INFO(ctx, "Opening video encoder: %s [%s]\n",
                 ctx->vc->long_name, ctx->vc->name);
 
-        if (ctx->vc->capabilities & CODEC_CAP_EXPERIMENTAL) {
+        if (ctx->vc->capabilities & AV_CODEC_CAP_EXPERIMENTAL) {
             stream->codec->strict_std_compliance = FF_COMPLIANCE_EXPERIMENTAL;
             MP_WARN(ctx, "\n\n"
                        "           ********************************************\n"
@@ -715,7 +715,7 @@ int encode_lavc_open_codec(struct encode_lavc_context *ctx, AVStream *stream)
         MP_INFO(ctx, "Opening audio encoder: %s [%s]\n",
                 ctx->ac->long_name, ctx->ac->name);
 
-        if (ctx->ac->capabilities & CODEC_CAP_EXPERIMENTAL) {
+        if (ctx->ac->capabilities & AV_CODEC_CAP_EXPERIMENTAL) {
             stream->codec->strict_std_compliance = FF_COMPLIANCE_EXPERIMENTAL;
             MP_WARN(ctx, "\n\n"
                        "           ********************************************\n"
